@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom Styles -->
+  <style>
+    body {
+      background-color: #f4f6f9;
+      font-family: Arial, sans-serif;
+    }
+    .navbar-custom {
+      background-color: #007bff;
+    }
+    .navbar-custom .navbar-brand, .navbar-custom .nav-link {
+      color: #ffffff;
+    }
+    .navbar-custom .nav-link:hover {
+      color: #e0e0e0;
+    }
+    .sidebar {
+      position: fixed;
+      top: 56px; /* Adjust based on the navbar height */
+      left: 0;
+      width: 250px;
+      height: calc(100vh - 56px);
+      background-color: #343a40;
+      color: #ffffff;
+      padding-top: 20px;
+      transform: translateX(-250px);
+      transition: transform 0.3s ease;
+    }
+    .sidebar.show {
+      transform: translateX(0);
+    }
+    .sidebar a {
+      color: #ffffff;
+      padding: 10px 20px;
+      display: block;
+      text-decoration: none;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .navbar-toggler-icon {
+      background-color: #ffffff;
+    }
+    .main-content {
+      margin-left: 0;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
+    .main-content.shift {
+      margin-left: 250px;
+    }
+    .card-header {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn-custom {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn-custom:hover {
+      background-color: #0056b3;
+    }
+    .btn-edit {
+      background-color: #ffc107;
+      color: white;
+    }
+    .btn-edit:hover {
+      background-color: #e0a800;
+    }
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+    .btn-delete:hover {
+      background-color: #c82333;
+    }
+    .btn-logout {
+      background-color: #6c757d;
+      color: white;
+    }
+    .btn-logout:hover {
+      background-color: #5a6268;
+    }
+    .navbar-toggler {
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <a class="navbar-brand" href="#">Admin Panel</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <form action="/logout" method="get" style="display:inline;">
+            <button type="submit" class="btn btn-logout btn-sm">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+
+  
+      <!-- Search Form -->
+      <div class="card mb-4">
+        <div class="card-header">
+          Search Users
+        </div>
+        <div class="card-body">
+          <form action="/admin/search" method="get">
+            <div class="input-group">
+              <input type="text" name="query" class="form-control" placeholder="Search users" required>
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-custom">Search</button>
+              </div>
+            </div>
+            <% 
+            if (typeof error !== 'undefined') { %>
+              <div class="alert alert-danger message">
+                <%= error %>
+              </div>
+          <% } %>
+          </form>
+        </div>
+      </div>
+
+    
+
+      <!-- Users Table -->
+      <div class="card">
+        <div class="card-header">
+          Users List
+        </div>
+        <div class="card-body">
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+           
+            <tbody>
+              <% users.forEach(user => { %>
+                <tr>
+                  <td><%= user.name %></td>
+                  <td><%= user.age %></td>
+                  <td><%= user.mobile %></td>
+                  <td><%= user.email %></td>
+                  <td>
+                    <form action="/admin/delete/<%= user._id %>" method="post" style="display:inline;">
+                      <button type="submit" class="btn btn-delete btn-sm">Delete</button>
+                    </form>
+                    <form action="/admin/edit-user/<%= user._id %>" method="get" style="display:inline;">
+                      <button type="submit" class="btn btn-edit btn-sm">Edit</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Custom Script for Sidebar Toggle -->
+  <script>
+    document.getElementById('sidebarToggle').addEventListener('click', function() {
+      var sidebar = document.getElementById('sidebar');
+      var mainContent = document.getElementById('mainContent');
+      sidebar.classList.toggle('show');
+      mainContent.classList.toggle('shift');
+    });
+  </script>
+</body>
+</html>

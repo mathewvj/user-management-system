@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Optional: Custom styles -->
+  <style>
+    .container {
+      max-width: 600px;
+      margin-top: 50px;
+    }
+    .form-control {
+      border-radius: 0.25rem;
+    }
+    .btn-custom {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn-custom:hover {
+      background-color: #0056b3;
+    }
+    .error{
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">Signup</h1>
+    <form action="/signup" method="post" id="signupform">
+      <% 
+      if (typeof message !== 'undefined') { %>
+        <div class="alert alert-danger message">
+          <%= message %>
+        </div>
+    <% } %>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+        <span id="nameError" class="error"></span>
+      </div>
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" class="form-control" id="age" name="age" placeholder="Age" required>
+        <span id="ageError" class="error"></span>
+      </div>
+      <div class="form-group">
+        <label for="mobile">Mobile</label>
+        <input type="number" class="form-control" id="mobile" name="mobile" placeholder="Mobile" required>
+        <span id="mobileError" class="error"></span>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+        <span id="emailError" class="error"></span>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+        <span id="passwordError" class="error"></span>
+      </div>
+      <button type="submit" class="btn btn-custom btn-block">Signup</button>
+    </form>
+    <h4 class="text-center mt-3">Already Have an Account? <a href="/login">Login</a></h4>
+  </div>
+
+  <!-- Bootstrap JS and dependencies (optional but recommended) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('signupform')
+
+    form.addEventListener('submit',(event)=>{
+      event.preventDefault()
+
+      clearErrors();
+   
+
+
+
+    const name = document.getElementById("name").value
+    const age = parseInt(document.getElementById("age").value, 10)
+    const mobile = document.getElementById("mobile").value
+    const email = document.getElementById("email").value
+    const password = document.getElementById("password").value
+
+    let isValid = true
+
+    if(!name.match(/^[a-zA-Z]+ [a-zA-Z]+$/)){
+      showError('nameError','First and last name required ')
+      isValid = false
+    }
+
+    if(!age || age < 1 || age > 110){
+      showError('ageError','Invalid Age')
+      isValid = false
+    }
+
+    if(!mobile.match(/^\d{10}$/)){
+      showError('mobileError','Mobile Number must be 10 numbers')
+      isValid = false
+    }
+
+    if(!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)){
+      showError('emailError','Enter valid Email')
+      isValid = false
+    }
+
+    if(!password || password.length < 8 ){
+      showError('passwordError','Password Must be 8 characters')
+      isValid = false
+    }
+
+    if(isValid){
+      form.submit()
+    }
+  })
+
+    function showError(elementId,message){
+
+      const errorElement = document.getElementById(elementId)
+      if(errorElement){
+        errorElement.textContent = message
+      }
+    }
+
+    function clearErrors(){
+      const errorElements = document.querySelectorAll('.error')
+      errorElements.forEach(el => el.textContent = '')
+    }
+
+  })
+
+
+  </script>
+</body>
+</html>
